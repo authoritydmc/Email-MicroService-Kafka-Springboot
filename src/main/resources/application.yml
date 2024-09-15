@@ -17,28 +17,23 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
+
+
   kafka:
-    bootstrap-servers: ${KAFKA_SERVER_ADDRESS:localhost:9092}
+    bootstrap-servers: localhost:9092
+
     consumer:
-      # Config for consuming normal strings
-      normal:
         group-id: string-group
         auto-offset-reset: earliest
         key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
-      # Config for consuming JSON objects
-      json:
-        group-id: json-group
-        auto-offset-reset: earliest
-        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-        properties:
-          spring.json.value.default.type: in.rajlabs.EmailService.dto.EmailerInfo
 
     producer:
-          key-serializer: org.apache.kafka.common.serialization.StringSerializer
-          value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+
 
 
 server:
