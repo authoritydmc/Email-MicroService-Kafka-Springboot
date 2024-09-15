@@ -6,6 +6,8 @@ spring:
     username: dbUser
     password: dbUser
     driver-class-name: com.mysql.cj.jdbc.Driver
+  profiles:
+    active: default
 
   jpa:
     hibernate:
@@ -15,20 +17,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
-  mail:
-    host: smtp.gmail.com                     # SMTP host (Gmail in this case)
-    port: 587                                # SMTP port (usually 587 for TLS, 465 for SSL)
-    username: ${EMAIL_USERNAME:default-email@gmail.com}  # Use default if EMAIL_USERNAME is not set
-    password: ${EMAIL_PASSWORD:default-password}         # Use default if EMAIL_PASSWORD is not set
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-          ssl:
-            enable: false
-    default-encoding: UTF-8
 
 server:
   port: 2012
