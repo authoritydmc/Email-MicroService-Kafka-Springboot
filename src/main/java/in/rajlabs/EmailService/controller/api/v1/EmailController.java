@@ -1,5 +1,8 @@
 package in.rajlabs.EmailService.controller.api.v1;
 
+import in.rajlabs.EmailService.dto.EmailerInfo;
+import in.rajlabs.EmailService.service.EmailService;
+import in.rajlabs.EmailService.util.EmailType;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/email")
@@ -22,6 +28,8 @@ public class EmailController {
 
     @Autowired
     private final JavaMailSender javaMailSender;
+    @Autowired
+    private EmailService emailService;
 
     public EmailController(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
@@ -85,6 +93,26 @@ public class EmailController {
 
             log.info("Test email sent successfully to {}", toEmail);
             return ResponseEntity.ok("Test email sent successfully!");
+        } catch (MailException e) {
+            log.error("Failed to send test email to {}", toEmail, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send test email. " + e.getMessage());
+        }
+    }
+
+
+    @GetMapping("/testNew")
+    public ResponseEntity<String> testThymelefedVersion(@RequestParam("to") String toEmail) {
+        try {
+            EmailerInfo emailInfo = new EmailerInfo();
+
+
+            emailInfo.setSubject("Dummy Email Subject");
+            emailInfo.setMailBody("Hello, this is a dummy email.");
+            emailInfo.setEmailType(EmailType.TEST);
+            emailInfo.setRecipientsList(List.of(toEmail));
+            emailService.sendEmail(emailInfo);
+
+            return new ResponseEntity<>("Dummy email sent successfully.", HttpStatus.OK);
         } catch (MailException e) {
             log.error("Failed to send test email to {}", toEmail, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send test email. " + e.getMessage());
