@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Content By Raj Dubey</title>
+    <style>
+        /* Background Styles */
+        body {
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <td bgcolor="#333333" height="20%">
+            <!-- Header -->
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center" style="color: #ffffff; padding: 20px; font-size: 30px; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                        <p th:utext="${headerText}">Default header</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td bgcolor="#485563" height="60%">
+            <!-- Content -->
+            <table width="60%" cellpadding="0" cellspacing="0" align="center">
+                <tr>
+                    <td align="center" valign="middle" style="color: #ffffff; padding: 20px; font-size: 18px; text-align: justify;">
+                        <p th:utext="${emailContent}">Default Email Content</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td bgcolor="#333333" height="20%">
+            <!-- Footer -->
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center" style="color: #ffffff; padding: 20px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                        Regards,<br>
+                        Auto Mailer
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

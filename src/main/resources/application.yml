@@ -1,6 +1,41 @@
 spring:
   application:
       name: EmailService-dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/email_service
+    username: dbUser
+    password: dbUser
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update                                    # Possible values: none, update, validate, create, create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  mail:
+    host: smtp.gmail.com                     # SMTP host (Gmail in this case)
+    port: 587                                # SMTP port (usually 587 for TLS, 465 for SSL)
+    username: testemailWrong@gmail.com            # Your email address
+    password: wrongPassword                   # Your email password (use App Password if using Gmail with 2FA)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: false
+    default-encoding: UTF-8
+
+  thymeleaf:
+    prefix: classpath:/templates/    # Where your templates are stored (usually in resources/templates/)
+    suffix: .html                    # File extension of the templates
+    mode: HTML                       # Template mode (e.g., HTML, XHTML, etc.)
+    encoding: UTF-8                  # Character encoding
+    cache: false
 
 
 server:
@@ -10,3 +45,5 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+
