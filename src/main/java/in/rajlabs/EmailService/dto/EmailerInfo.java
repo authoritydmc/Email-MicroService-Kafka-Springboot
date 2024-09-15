@@ -4,10 +4,7 @@ package in.rajlabs.EmailService.dto;
 import in.rajlabs.EmailService.util.AttachmentInfo;
 import in.rajlabs.EmailService.util.CommonUtils;
 import in.rajlabs.EmailService.util.EmailType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
@@ -20,6 +17,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class EmailerInfo {
 
 
