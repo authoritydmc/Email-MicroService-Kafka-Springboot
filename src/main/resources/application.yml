@@ -4,8 +4,7 @@ spring:
 
 
 server:
-  port:
-    - 2012
+    port: 2012
 
 eureka:
   client:
