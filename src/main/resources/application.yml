@@ -1,6 +1,6 @@
 spring:
   application:
-      name: EmailService-dev
+    name: EmailService-dev
   datasource:
     url: jdbc:mysql://localhost:3306/email_service
     username: dbUser
@@ -18,8 +18,8 @@ spring:
   mail:
     host: smtp.gmail.com                     # SMTP host (Gmail in this case)
     port: 587                                # SMTP port (usually 587 for TLS, 465 for SSL)
-    username: testemailWrong@gmail.com            # Your email address
-    password: wrongPassword                   # Your email password (use App Password if using Gmail with 2FA)
+    username: ${EMAIL_USERNAME:default-email@gmail.com}  # Use default if EMAIL_USERNAME is not set
+    password: ${EMAIL_PASSWORD:default-password}         # Use default if EMAIL_PASSWORD is not set
     properties:
       mail:
         smtp:
@@ -30,13 +30,10 @@ spring:
             enable: false
     default-encoding: UTF-8
 
-
 server:
-    port: 2012
+  port: 2012
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
-
-
