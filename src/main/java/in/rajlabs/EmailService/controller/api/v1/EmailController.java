@@ -2,6 +2,8 @@ package in.rajlabs.EmailService.controller.api.v1;
 
 import in.rajlabs.EmailService.dto.EmailerInfo;
 import in.rajlabs.EmailService.service.EmailService;
+import in.rajlabs.EmailService.service.KafkaProducerService;
+import in.rajlabs.EmailService.util.CONSTANTS;
 import in.rajlabs.EmailService.util.EmailType;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -30,6 +32,9 @@ public class EmailController {
     private final JavaMailSender javaMailSender;
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private KafkaProducerService kafkaProducerService;
 
     public EmailController(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
@@ -98,21 +103,44 @@ public class EmailController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send test email. " + e.getMessage());
         }
     }
+    @GetMapping("/kafka/test")
+    public ResponseEntity<String> kafkatest(@RequestParam("to") String toEmail) {
+        try {
+        kafkaProducerService.sendStringMessage("SEND_EMAILS","this is normal test email string which need to be send ");
+            return new ResponseEntity<>("Dummy email sent successfully.", HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Failed to send test email to {}", toEmail, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send test email. " + e.getMessage());
+        }
+    }
 
-
-    @GetMapping("/testNew")
+    @GetMapping("/kafka/testNew")
     public ResponseEntity<String> testThymelefedVersion(@RequestParam("to") String toEmail) {
         try {
+
             EmailerInfo emailInfo = new EmailerInfo();
-
-
             emailInfo.setSubject("Dummy Email Subject");
             emailInfo.setMailBody("Hello, this is a dummy email.");
             emailInfo.setEmailType(EmailType.TEST);
             emailInfo.setRecipientsList(List.of(toEmail));
-            emailService.sendEmail(emailInfo);
+            kafkaProducerService.sendJsonMessage(CONSTANTS.KEY_KAFKA_EMAIL_TOPIC,emailInfo);
+            return new ResponseEntity<>("kafka message produced to send email", HttpStatus.OK);
+        } catch (MailException e) {
+            log.error("Failed to send test email to {}", toEmail, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send test email. " + e.getMessage());
+        }
+    }
+    @GetMapping("/testNew")
+    public ResponseEntity<String> normalthymeleafemail(@RequestParam("to") String toEmail) {
+        try {
 
-            return new ResponseEntity<>("Dummy email sent successfully.", HttpStatus.OK);
+            EmailerInfo emailInfo = new EmailerInfo();
+            emailInfo.setSubject("Dummy Email Subject");
+            emailInfo.setMailBody("Hello, this is a dummy email.");
+            emailInfo.setEmailType(EmailType.TEST);
+            emailInfo.setRecipientsList(List.of(toEmail));
+        emailService.sendEmail(emailInfo);
+            return new ResponseEntity<>("dummy email send email", HttpStatus.OK);
         } catch (MailException e) {
             log.error("Failed to send test email to {}", toEmail, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send test email. " + e.getMessage());
