@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="EmailService [PROD]" type="Application" factoryName="Application">
+    <option name="INCLUDE_PROVIDED_SCOPE" value="true" />
+    <option name="MAIN_CLASS_NAME" value="in.rajlabs.EmailService.EmailServiceApplication" />
+    <module name="EmailService" />
+    <option name="PROGRAM_PARAMETERS" value="--spring.profiles.active=prod" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="in.rajlabs.EmailService.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
