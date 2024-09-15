@@ -1,6 +1,7 @@
 package in.rajlabs.EmailService.controller.api.v1;
 
 import in.rajlabs.EmailService.dto.EmailerInfo;
+import in.rajlabs.EmailService.dto.EmailerInfoForKafka;
 import in.rajlabs.EmailService.service.EmailService;
 import in.rajlabs.EmailService.service.KafkaProducerService;
 import in.rajlabs.EmailService.util.CONSTANTS;
@@ -115,21 +116,25 @@ public class EmailController {
     }
 
     @GetMapping("/kafka/testNew")
-    public ResponseEntity<String> testThymelefedVersion(@RequestParam("to") String toEmail) {
+    public ResponseEntity<String> testKafkaProducer(@RequestParam("to") String toEmail) {
         try {
+            // Create an instance of the new DTO
+            EmailerInfoForKafka emailInfoForKafka = new EmailerInfoForKafka();
+            emailInfoForKafka.setSubject("Dummy Email Subject");
+            emailInfoForKafka.setMailBody("Hello, this is a dummy email.");
 
-            EmailerInfo emailInfo = new EmailerInfo();
-            emailInfo.setSubject("Dummy Email Subject");
-            emailInfo.setMailBody("Hello, this is a dummy email.");
-            emailInfo.setEmailType(EmailType.TEST);
-            emailInfo.setRecipientsList(List.of(toEmail));
-            kafkaProducerService.sendJsonMessage(CONSTANTS.KEY_KAFKA_EMAIL_TOPIC,emailInfo);
-            return new ResponseEntity<>("kafka message produced to send email", HttpStatus.OK);
-        } catch (MailException e) {
-            log.error("Failed to send test email to {}", toEmail, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send test email. " + e.getMessage());
+            emailInfoForKafka.setRecipientsList(List.of(toEmail));
+
+            // Produce the message to Kafka
+            kafkaProducerService.sendJsonMessage(CONSTANTS.KEY_KAFKA_EMAIL_TOPIC, emailInfoForKafka);
+
+            return new ResponseEntity<>("Kafka message produced to send email", HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Failed to produce Kafka message for {}", toEmail, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to produce Kafka message. " + e.getMessage());
         }
     }
+
     @GetMapping("/testNew")
     public ResponseEntity<String> normalthymeleafemail(@RequestParam("to") String toEmail) {
         try {
