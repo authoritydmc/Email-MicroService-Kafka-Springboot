@@ -106,7 +106,7 @@ public class EmailController {
     @GetMapping("/kafka/test")
     public ResponseEntity<String> kafkatest(@RequestParam("to") String toEmail) {
         try {
-        kafkaProducerService.sendStringMessage("SEND_EMAILS","this is normal test email string which need to be send ");
+        kafkaProducerService.sendStringMessage(CONSTANTS.KEY_KAFKA_EMAIL_TOPIC,"this is normal test email string which need to be send ");
             return new ResponseEntity<>("Dummy email sent successfully.", HttpStatus.OK);
         } catch (Exception e) {
             log.error("Failed to send test email to {}", toEmail, e);
